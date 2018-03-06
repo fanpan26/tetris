@@ -1,6 +1,6 @@
 package com.univteam.tetris.engine.point;
 
-import com.univteam.tetris.engine.GameMap;
+import com.univteam.tetris.engine.game.GameMap;
 
 /**
  * @Author fyp
@@ -22,6 +22,7 @@ public class Point {
         }
         this.x = x;
         this.y = y;
+        clear();
     }
 
     public int getX() {
@@ -32,9 +33,15 @@ public class Point {
         return y;
     }
 
+    public int getStatus(){ return status; }
+
     private int x;
 
     private int y;
+    /**
+     * 点的状态 -1 正常  0 已经固定，未消除 1 方块
+     * */
+    private int status;
 
     /**
      * 获取当前点左边的点
@@ -63,9 +70,21 @@ public class Point {
         return  PointCache.getPoint(x ,y + 1);
     }
 
+    public void stop(){
+        this.status = 0;
+    }
+
+    public void clear(){
+        this.status = -1;
+    }
+
+    public void normal(){
+        this.status = 1;
+    }
+
 
     @Override
     public String toString() {
-        return String.format("X:%d Y:%d",x,y);
+        return String.format("%d,%d",x,y);
     }
 }

@@ -9,6 +9,9 @@
 </body>
 <script>
     var size = 10;
+    var addColor = 'green';
+    var clearColor = 'black';
+    var stopColor = 'yellow';
     var tetris = {
         context:null,
         getCtx:function () {
@@ -21,12 +24,43 @@
         draw:function (x,y,c) {
             this.getCtx().fillStyle = c||'green';
             this.getCtx().fillRect(x * size, y * size, size, size);
+        },
+        handle:function (msg) {
+
+            var add = msg.added;
+            var clear = msg.cleared;
+
+            var drawDetail = function (str,color) {
+                var xy;
+                if(str) {
+                    var arr = str.split('|');
+                    for (var i = 0; i < arr.length; i++) {
+                        xy = arr[i].split(',');
+                        tetris.draw(xy[0], xy[1], color)
+                    }
+                }
+            }
+            //先clear后add
+            drawDetail(clear,clearColor);
+            drawDetail(add,addColor);
+
         }
     };
 
-    var ws = new WebSocket('ws://127.0.0.1:8886');
+    var ws = new WebSocket('ws://127.0.0.1:8886?roomId=45');
     ws.onopen = function (event) {
         console.log('server started');
+        ws.send('1');
+    }
+    ws.onmessage = function (event) {
+        try {
+            var j = JSON.parse(event.data);
+            if(j.t==1){
+                tetris.handle(j.d);
+            }
+        }catch(e) {
+            console.log(e.message);
+        }
     }
 
 </script>

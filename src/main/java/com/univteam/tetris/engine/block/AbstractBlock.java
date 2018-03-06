@@ -1,5 +1,7 @@
 package com.univteam.tetris.engine.block;
 
+import com.univteam.tetris.engine.data.HistoryData;
+import com.univteam.tetris.engine.game.GameMap;
 import com.univteam.tetris.engine.point.Point;
 
 /**
@@ -14,16 +16,24 @@ public abstract class AbstractBlock implements Block {
      * @description 每个方块四个点
      * */
     private final int POINT_NUM = 4;
+    /**
+     * 历史轨迹，用于数据传输
+     * */
+    private final HistoryData historyData = new HistoryData();
     protected final Point[] points = new Point[POINT_NUM];
     protected BlockStatus blockStatus;
 
+
+
     public AbstractBlock(){
-        this(new Point(0,0));
+        this(GameMap.getStartPoint());
     }
 
     public AbstractBlock(Point startPoint){
         blockStatus = getDefaultStatus();
         build(startPoint);
+
+        historyData.setAdded(points);
     }
 
     public BlockStatus getBlockStatus() {
@@ -33,8 +43,13 @@ public abstract class AbstractBlock implements Block {
     /**
      * @description 返回方块
      * */
+    @Override
     public Point[] getPoints(){
         return points;
+    }
+    @Override
+    public HistoryData getHistory() {
+        return historyData;
     }
 
     /**
@@ -45,6 +60,43 @@ public abstract class AbstractBlock implements Block {
         if(rotatable()){
            doRotate();
         }
+    }
+
+    /**
+     * 点向下移动
+     * 将之前的点设置为清除状态
+     * 之后的点设置为方块状态
+     * */
+    @Override
+    public void next() {
+        changeStatusToClear();
+        historyData.setCleared(points);
+        for (int i = 0; i < points.length; i++) {
+            points[i] = points[i].down();
+        }
+        changeStatusToNormal();
+        historyData.setAdded(points);
+    }
+
+    /**
+     * 上一步
+     * */
+    @Override
+    public void prev(){
+        for (int i = 0; i < points.length; i++) {
+            points[i] = points[i].up();
+        }
+        historyData.setAdded(null);
+        historyData.setCleared(null);
+    }
+
+    /**
+     * 下一步
+     * */
+    @Override
+    public void stop(){
+        changeStatusToStop();
+        historyData.setStoped(points);
     }
 
     /**
@@ -70,5 +122,30 @@ public abstract class AbstractBlock implements Block {
     @Override
     public String toString() {
         return points[0].toString() + points[1] + points[2] + points[3];
+    }
+
+    /**
+     * 每个点的状态变化
+     * */
+    private void changeStatusToNormal(){
+        for (Point point : points){
+            point.normal();
+        }
+    }
+    /**
+     * 将点清除
+     * */
+    private void changeStatusToClear(){
+        for (Point point : points){
+            point.clear();
+        }
+    }
+    /**
+     * 将点的状态替换成已经停止
+     * */
+    private void changeStatusToStop(){
+        for (Point point : points){
+            point.stop();
+        }
     }
 }
