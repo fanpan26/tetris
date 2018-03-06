@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>俄罗斯方块</title>
+</head>
+<body>
+<canvas id="tetris" width="300" height="600" style="background: Black"></canvas>
+</body>
+<script>
+    var size = 10;
+    var tetris = {
+        context:null,
+        getCtx:function () {
+            if(this.context ==null) {
+                var canvas = document.getElementById('tetris');
+                this.context = canvas.getContext('2d');
+            }
+            return this.context;
+        },
+        draw:function (x,y,c) {
+            this.getCtx().fillStyle = c||'green';
+            this.getCtx().fillRect(x * size, y * size, size, size);
+        }
+    };
+
+    var ws = new WebSocket('ws://127.0.0.1:8886');
+    ws.onopen = function (event) {
+        console.log('server started');
+    }
+
+    tetris.draw(1,1);
+    tetris.draw(1,2);
+    tetris.draw(2,2);
+    tetris.draw(3,2);
+</script>
+</html>
