@@ -5,6 +5,9 @@ import com.univteam.tetris.engine.data.PushData;
 import com.univteam.tetris.engine.player.Player;
 import com.univteam.tetris.engine.room.Room;
 import com.univteam.tetris.push.BodyWrapper;
+import com.univteam.tetris.push.handler.cmd.AbstractCmdHandler;
+import com.univteam.tetris.push.handler.cmd.CmdFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.tio.core.Aio;
 import org.tio.core.ChannelContext;
 import org.tio.http.common.HttpRequest;
@@ -25,20 +28,30 @@ public class TetrisWsHandler implements IWsMsgHandler {
             return null;
         }
 
-        @Override
-        public Object onText(WsRequest wsRequest, String s, ChannelContext channelContext) throws Exception {
-           Room room = GameStarter.getEngine().getRooms().get(s);
-           if(room == null){
-               return "无效的房间号";
-           }else {
-               Player player = new Player();
-               player.setId(10000L);
-               player.setName("test");
-               player.setPhoto("");
+        /**
+         * 处理指令
+         * */
+        private String getCmd(String text) {
 
-               boolean res = room.addPlayer(player);
-               return BodyWrapper.createBody(PushData.build(res ?"加入房间成功" : "游戏已经开始，观战中...",0)) ;
-           }
+            if (StringUtils.isBlank(text)) {
+                return "";
+            }
+            String[] cmds = text.split(":");
+            if (cmds.length>2){
+                return cmds[1];
+            }
+            return "";
+        }
+        @Override
+        public Object onText(WsRequest wsRequest, String text, ChannelContext channelContext) throws Exception {
+
+            String cmd = getCmd(text);
+            AbstractCmdHandler handler = CmdFactory.getHandler(cmd);
+            if(handler == null){
+                return BodyWrapper.createBody(PushData.build("无效的命令" ,0)) ;
+            }
+
+           return handler.handle(text);
         }
 
         @Override

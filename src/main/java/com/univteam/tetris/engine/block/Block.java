@@ -28,6 +28,19 @@ public interface Block {
      * 停止
      * */
     void stop();
+
+    /**
+     * 方块向左移动
+     * */
+    void left();
+    /**
+     * 方块向右移动
+     * */
+    void right();
+    /**
+     * 方块快速向下
+     * */
+    void down();
     /**
      * 获取方块的元素
      * */

@@ -3,6 +3,7 @@ package com.univteam.tetris.engine.block;
 import com.univteam.tetris.engine.data.HistoryData;
 import com.univteam.tetris.engine.game.GameMap;
 import com.univteam.tetris.engine.point.Point;
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 /**
  * @Author fyp
@@ -21,9 +22,9 @@ public abstract class AbstractBlock implements Block {
      * */
     private final HistoryData historyData = new HistoryData();
     protected final Point[] points = new Point[POINT_NUM];
+    //保存变形之前的数据，用于还原
+    private final Point[] beforeRotate = new Point[POINT_NUM];
     protected BlockStatus blockStatus;
-
-
 
     public AbstractBlock(){
         this(GameMap.getStartPoint());
@@ -57,9 +58,49 @@ public abstract class AbstractBlock implements Block {
      * */
     @Override
     public void rotate() {
-        if(rotatable()){
-           doRotate();
+        if (rotatable()) {
+            changeStatusToClear();
+            saveRotateData();
+            try {
+                doRotate();
+                changeStatusToNormal();
+            }catch (RotatedFailedException e){
+                System.out.println("旋转失败，需要返回");
+                prev();
+            }
         }
+    }
+
+    /**
+     * 方块向左移动
+     * */
+    @Override
+    public void left(){
+        changeStatusToClear();
+        for (int i = 0; i < points.length; i++) {
+            points[i] = points[i].left();
+        }
+        changeStatusToNormal();
+    }
+
+    /**
+     * 方块向右移动
+     * */
+    @Override
+    public void right(){
+        changeStatusToClear();
+        for (int i = 0; i < points.length; i++) {
+            points[i] = points[i].right();
+        }
+        changeStatusToNormal();
+    }
+
+    /**
+     * 方块快速向下移动
+     * */
+    @Override
+    public void down(){
+
     }
 
     /**
@@ -70,12 +111,10 @@ public abstract class AbstractBlock implements Block {
     @Override
     public void next() {
         changeStatusToClear();
-        historyData.setCleared(points);
         for (int i = 0; i < points.length; i++) {
             points[i] = points[i].down();
         }
         changeStatusToNormal();
-        historyData.setAdded(points);
     }
 
     /**
@@ -84,7 +123,7 @@ public abstract class AbstractBlock implements Block {
     @Override
     public void prev(){
         for (int i = 0; i < points.length; i++) {
-            points[i] = points[i].up();
+            points[i] = beforeRotate[i];
         }
         historyData.setAdded(null);
         historyData.setCleared(null);
@@ -107,7 +146,7 @@ public abstract class AbstractBlock implements Block {
     /**
      * @description 旋转操作
      * */
-    public abstract void doRotate();
+    public abstract void doRotate() throws RotatedFailedException;
 
     /**
      * @description 构建方块
@@ -121,7 +160,7 @@ public abstract class AbstractBlock implements Block {
 
     @Override
     public String toString() {
-        return points[0].toString() + points[1] + points[2] + points[3];
+        return points[0].toString() +" "+ points[1] +" "+ points[2] +" "+ points[3];
     }
 
     /**
@@ -131,6 +170,7 @@ public abstract class AbstractBlock implements Block {
         for (Point point : points){
             point.normal();
         }
+        historyData.setAdded(points);
     }
     /**
      * 将点清除
@@ -139,6 +179,7 @@ public abstract class AbstractBlock implements Block {
         for (Point point : points){
             point.clear();
         }
+        historyData.setCleared(points);
     }
     /**
      * 将点的状态替换成已经停止
@@ -147,5 +188,14 @@ public abstract class AbstractBlock implements Block {
         for (Point point : points){
             point.stop();
         }
+    }
+
+    /**
+     * 保存变形前数据
+     * */
+    private void saveRotateData(){
+       for (int i=0;i<4;i++){
+           beforeRotate[i] = points[i];
+       }
     }
 }

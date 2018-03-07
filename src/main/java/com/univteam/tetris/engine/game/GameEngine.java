@@ -40,7 +40,7 @@ public class GameEngine {
     }
 
     public GameEngine(){
-        refreshTime = 500;
+        refreshTime = 200;
         initRoom();
     }
 
@@ -53,11 +53,14 @@ public class GameEngine {
      * */
     public void start() {
         mapFuture = executorService.scheduleWithFixedDelay(() -> {
-           gameUpdate();
+            gameRefresh();
         }, refreshTime, refreshTime, TimeUnit.MILLISECONDS);
     }
 
-    private void gameUpdate(){
+    /**
+     * 游戏刷新
+     * */
+    private void gameRefresh(){
         for (Map.Entry<String,Room> entry : rooms.entrySet()){
             entry.getValue().refresh();
         }

@@ -1,6 +1,7 @@
 package com.univteam.tetris.engine.block.blocks;
 
 import com.univteam.tetris.engine.block.BlockStatus;
+import com.univteam.tetris.engine.block.RotatedFailedException;
 import com.univteam.tetris.engine.point.Point;
 import com.univteam.tetris.engine.block.AbstractBlock;
 
@@ -33,34 +34,35 @@ public class LetterLLeftBlock extends AbstractBlock {
      * 根据当前的方向进行转换
      * */
     @Override
-    public void doRotate() {
+    public void doRotate() throws RotatedFailedException {
         switch(blockStatus){
             case LEFT:
-                points[0] = points[0].up();
+                points[2] = points[1];
+                points[3] = points[2].down();
+                points[1] = points[2].left();
+                points[0] = points[1].left();
+                blockStatus = BlockStatus.DOWN;
+                break;
+            case UP:
+                points[3] = points[1];
+                points[2] = points[3].right();
+                points[1] = points[2].up();
+                points[0] = points[1].up();
+                blockStatus = BlockStatus.LEFT;
+                break;
+            case RIGHT:
+                points[2] = points[3].left();
                 points[1] = points[0].down();
                 points[2] = points[1].right();
                 points[3] = points[2].right();
                 blockStatus = BlockStatus.UP;
                 break;
-            case UP:
+            case DOWN:
+                points[0] = points[1];
                 points[1] = points[0].right();
-                points[2] = points[1].down();
+                points[2] = points[0].down();
                 points[3] = points[2].down();
                 blockStatus = BlockStatus.RIGHT;
-                break;
-            case RIGHT:
-                points[0] = points[3];
-                points[1] = points[0].right();
-                points[2] = points[1].right();
-                points[3] = points[2].down();
-                blockStatus = BlockStatus.DOWN;
-                break;
-            case DOWN:
-                points[0] = points[2].up();
-                points[1] = points[0].down();
-                points[2] = points[1].down();
-                points[3] = points[2].left();
-                blockStatus = BlockStatus.LEFT;
                 break;
         }
     }

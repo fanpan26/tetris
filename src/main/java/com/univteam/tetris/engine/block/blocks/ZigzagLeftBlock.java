@@ -1,6 +1,7 @@
 package com.univteam.tetris.engine.block.blocks;
 
 import com.univteam.tetris.engine.block.BlockStatus;
+import com.univteam.tetris.engine.block.RotatedFailedException;
 import com.univteam.tetris.engine.point.Point;
 import com.univteam.tetris.engine.block.AbstractBlock;
 
@@ -30,7 +31,7 @@ public class ZigzagLeftBlock extends AbstractBlock {
     }
 
     @Override
-    public void doRotate() {
+    public void doRotate() throws RotatedFailedException {
         switch (blockStatus){
             case VERTICAL:
                 points[0] = points[2];
@@ -55,4 +56,5 @@ public class ZigzagLeftBlock extends AbstractBlock {
     protected BlockStatus getDefaultStatus() {
         return BlockStatus.VERTICAL;
     }
+
 }

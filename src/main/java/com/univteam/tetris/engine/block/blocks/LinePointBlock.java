@@ -1,6 +1,7 @@
 package com.univteam.tetris.engine.block.blocks;
 
 import com.univteam.tetris.engine.block.BlockStatus;
+import com.univteam.tetris.engine.block.RotatedFailedException;
 import com.univteam.tetris.engine.point.Point;
 import com.univteam.tetris.engine.block.AbstractBlock;
 
@@ -28,7 +29,7 @@ public class LinePointBlock extends AbstractBlock {
     }
 
     @Override
-    public void doRotate() {
+    public void doRotate() throws RotatedFailedException {
         switch (blockStatus){
             case UP:
                 points[2] = points[0].down();

@@ -2,6 +2,7 @@ package com.univteam.tetris.engine.player;
 
 import com.univteam.tetris.engine.data.HistoryData;
 import com.univteam.tetris.engine.game.GameData;
+import com.univteam.tetris.engine.room.Room;
 
 /**
  * @Author fyp
@@ -10,17 +11,26 @@ import com.univteam.tetris.engine.game.GameData;
  * @Project com.univteam.tetris
  */
 public class Player {
-    private long id;
+    private String id;
     private String name;
     private String photo;
+    private Room room;
 
-    private GameData gameData = GameData.DEFAULT;
+    public void setRoom(Room room){
+        this.room = room;
+    }
 
-    public long getId() {
+    public Room getRoom(){
+        return room;
+    }
+
+    private GameData gameData = new GameData(this);
+
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,10 +61,4 @@ public class Player {
         getGameData().refresh();
     }
 
-    /**
-     * 获取历史记录，层数太多，需要重构
-     * */
-    public HistoryData getHistory(){
-        return getGameData().getHistory();
-    }
 }

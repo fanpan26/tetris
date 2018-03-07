@@ -14,6 +14,10 @@ public class HistoryData {
     private String stoped;
 
     private String getData(Point[] points) {
+        if (points == null||points.length == 0) {
+            return "";
+        }
+
         StringBuilder str = new StringBuilder();
         for (Point point : points) {
             str.append(point);
@@ -41,4 +45,5 @@ public class HistoryData {
     public String getCleared(){
         return cleared;
     }
+    public String getStoped(){return stoped;}
 }

@@ -1,6 +1,8 @@
 package com.univteam.tetris.engine.point;
 
+import com.univteam.tetris.engine.block.RotatedFailedException;
 import com.univteam.tetris.engine.game.GameMap;
+import javafx.scene.transform.Rotate;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -38,11 +40,11 @@ public class PointCache {
     /**
      * 从缓存中获取point
      * */
-    public static Point getPoint (int x,int y){
+    public static Point getPoint (int x,int y) throws RotatedFailedException{
         String key = getKey(x,y);
         Point point = cachedPointMap.get(key);
         if (point == null){
-           System.out.println("为 null");
+          throw new RotatedFailedException(key);
         }
         return point;
     }

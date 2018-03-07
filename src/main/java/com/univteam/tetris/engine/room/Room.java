@@ -37,11 +37,6 @@ public class Room {
      * 每个房间的最大游戏人数
      * */
     private final int PLAYER_COUNT = 1;
-
-    /**
-     * 当前玩家个数
-     * */
-    private int currentPlayerCount = 0;
     /**
      * 游戏是否开始
      * */
@@ -60,8 +55,8 @@ public class Room {
     /**
      * 判断是否满员
      * */
-    private synchronized boolean isFull(){
-        return currentPlayerCount >= PLAYER_COUNT;
+    private boolean isFull(){
+        return players.size() >= PLAYER_COUNT;
     }
 
     /**
@@ -78,13 +73,27 @@ public class Room {
             return false;
         }
         players.add(player);
-        currentPlayerCount += 1;
         if(isFull()){
            gameStart();
         }
         return true;
     }
 
+    /**
+     * 获取当前的player
+     * */
+    public Player getPlayer(String playerId){
+        for (Player player : players){
+            if (player.getId().equals(playerId)){
+                return player;
+            }
+        }
+        return null;
+    }
+
+    public RoomListener getListener() {
+        return listener;
+    }
 
     /**
      * 更新游戏状态
@@ -94,7 +103,7 @@ public class Room {
             System.out.println("游戏进行中...");
             for (Player player : players){
                 player.play();
-                HistoryData historyData = player.getHistory();
+                HistoryData historyData = player.getGameData().getHistory();
                 if (listener != null){
                     listener.onchange(historyData);
                 }

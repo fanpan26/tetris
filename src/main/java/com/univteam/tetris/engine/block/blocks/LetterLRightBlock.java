@@ -2,6 +2,7 @@ package com.univteam.tetris.engine.block.blocks;
 
 import com.univteam.tetris.engine.block.AbstractBlock;
 import com.univteam.tetris.engine.block.BlockStatus;
+import com.univteam.tetris.engine.block.RotatedFailedException;
 import com.univteam.tetris.engine.point.Point;
 
 /**
@@ -34,13 +35,13 @@ public class LetterLRightBlock extends AbstractBlock{
     }
 
     @Override
-    public void doRotate() {
+    public void doRotate() throws RotatedFailedException {
         switch (blockStatus){
             case RIGHT:
-                points[0] = points[2].up();
-                points[1] = points[0].down();
-                points[2] = points[1].left();
-                points[3] = points[2].left();
+                points[0] = points[3].up();
+                points[3] = points[0].down();
+                points[2] = points[3].left();
+                points[1] = points[2].left();
 
                 blockStatus = BlockStatus.UP;
                 break;
