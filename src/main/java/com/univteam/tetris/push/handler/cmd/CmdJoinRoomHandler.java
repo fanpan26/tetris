@@ -46,8 +46,8 @@ public class CmdJoinRoomHandler extends AbstractCmdHandler {
             if (res){
                 Aio.bindGroup(channelContext,roomId);
                 Aio.bindUser(channelContext,player.getId());
-
-                MessageSender.sendJoinRoomMessage(roomId,player.getId(),new JoinRoomMessage(player.getId(),room.getPlayers()));
+                //发送加入房间的消息
+                MessageSender.sendJoinRoomMessage(roomId,player.getId(),new JoinRoomMessage(player.getId(),room.getPlayers(),room.isFull()));
                 //要发送一条系统消息
                 MessageSender.sendSysMessage(roomId,String.format("系统：用户【%s】加入游戏",player.getName()));
                 return null;
