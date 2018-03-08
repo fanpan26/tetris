@@ -100,7 +100,7 @@ public abstract class AbstractBlock implements Block {
      * */
     @Override
     public void down(){
-       // next();
+        next();
     }
 
     /**

@@ -13,6 +13,16 @@ public class HistoryData {
     private String added;
     private String stoped;
 
+    private int version = 0;
+
+    public int getVersion() {
+        return version;
+    }
+
+    private void setVersion(){
+        this.version+=1;
+    }
+
     private String getData(Point[] points) {
         if (points == null||points.length == 0) {
             return "";
@@ -29,14 +39,17 @@ public class HistoryData {
 
     public  void setCleared(Point[] points){
         this.cleared = getData(points);
+        setVersion();
     }
 
     public void setAdded(Point[] points) {
         this.added = getData(points);
+        setVersion();
     }
 
     public void setStoped(Point[] points){
         this.stoped = getData(points);
+        setVersion();
     }
 
     public String getAdded() {

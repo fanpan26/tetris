@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @Author fyp
@@ -26,7 +28,7 @@ public class GameData {
     private GameStatus status;
     private Block currentBlock;
     private final GameListener gameListener = new DefaultGameListener();
-    private final Map<String,Point> stopedPoints = new HashMap<>(1000);
+    private final ConcurrentMap<String,Point> stopedPoints = new ConcurrentHashMap<>(1000);
     private final Player player;
     private int totalScore;
 
@@ -130,7 +132,10 @@ public class GameData {
      * */
     public void down(){
         if (gameStarted()) {
-            currentBlock.down();
+            //这里必须加判断，否则键盘向下操作会导致点不对的问题
+            if (!GameMap.onBottom(currentBlock) && !shouldStop(Direction.DOWN)) {
+                currentBlock.down();
+            }
         }
     }
 
