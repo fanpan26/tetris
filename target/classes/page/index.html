@@ -1,17 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>俄罗斯方块</title>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="css/boostrap.css">
     <style>
         .canvas{
             background: #242736;
             margin: 2%;
         }
+        .canvas-pre{
+            background:#242736;
+            margin: 2%;
+        }
+        div .game{
+            border: solid 1px #66cccc ;
+            border-radius: 5px;
+            text-align: center;
+        }
+        div .game-pre{
+            text-align: left;
+            margin-top:10px;
+        }
+        div .chat{
+            height: 300px;
+            overflow: auto;
+        }
+        .user-photo{
+            width:20px;
+            height:20px;
+            border-radius: 50%;
+        }
+        .player-photo{
+            width:80px;
+            height:80px;
+            border-radius: 50%;
+        }
+        .player-info {
+            text-align: center;
+            margin-top: 50px;
+        }
+        ul li{
+            font-family: 微软雅黑;
+            font-size: small;
+            list-style-type:none;
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
-    <canvas id="tetris_u1" width="200" height="400" class="canvas"></canvas>
-    <canvas id="tetris_u2" width="200" height="400" class="canvas"></canvas>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span2">
+
+        </div>
+        <div class="span8">
+            <div class="row-fluid">
+                <div class="span12">
+                    <h4>俄罗斯方块联机版</h4>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span4">
+                    <div class="row-fluid game">
+                        <div class="span8">
+                            <canvas id="tetris_u1" width="200" height="400" class="canvas"></canvas>
+                        </div>
+                        <div class="span4 game-pre">
+                            <canvas id="tetris_u1_pre" width="90" height="90" class="canvas-pre"></canvas>
+                            <h1 id="user_score_u1">0</h1>
+                            <div class="player-info"><img class="player-photo" id="user_photo_u1" src="/images/photo/nouser.jpg"/></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="row-fluid game">
+                        <div class="span8">
+                            <canvas id="tetris_u2" width="200" height="400" class="canvas"></canvas>
+                        </div>
+                        <div class="span4 game-pre">
+                            <canvas id="tetris_u2_pre" width="90" height="90" class="canvas-pre"></canvas>
+                            <h1 id="user_score_u2">0</h1>
+                            <div class="player-info"><img class="player-photo" id="user_photo_u2" src="/images/photo/nouser.jpg"/></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span4">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <ul>
+                                <strong>积分排名</strong>
+                                <li>No.1 <img class="user-photo" src="http://img1.gurucv.com/image/2018/2/6/760bd5bd227f4b59bed7553e73b4da0d.png"/>  <span>0</span></li>
+                                <li>No.2 <img class="user-photo" src="http://img1.gurucv.com/image/2018/2/6/760bd5bd227f4b59bed7553e73b4da0d.png"> <span>0</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12 chat">
+                            <ul>
+                            </ul>
+
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <textarea style="width:90%;height: 100%" placeholder="说点什么吧"></textarea>
+                            <button>发送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span2">
+
+        </div>
+    </div>
+</div>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/game.js"></script>
 </body>
 </html>

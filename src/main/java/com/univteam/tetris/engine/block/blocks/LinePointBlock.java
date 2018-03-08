@@ -32,8 +32,13 @@ public class LinePointBlock extends AbstractBlock {
     public void doRotate() throws RotatedFailedException {
         switch (blockStatus){
             case UP:
+                //第一个点不变
+               // points[0] = points[0];
+                //第二个点在第一个点下面
                 points[1] = points[0].down();
+                //第三个点在第一个点右边
                 points[2] = points[1].right();
+                //第四个点在二个点下面
                 points[3] = points[1].down();
                 blockStatus = BlockStatus.RIGHT;
                 break;

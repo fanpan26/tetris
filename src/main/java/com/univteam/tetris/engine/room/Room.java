@@ -36,7 +36,7 @@ public class Room {
     /**
      * 每个房间的最大游戏人数
      * */
-    private final int PLAYER_COUNT = 1;
+    private final int PLAYER_COUNT = 2;
     /**
      * 游戏是否开始
      * */
