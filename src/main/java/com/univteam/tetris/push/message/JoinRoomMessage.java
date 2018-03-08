@@ -12,12 +12,14 @@ import java.util.List;
  */
 public class JoinRoomMessage extends BaseMessage {
 
-    public JoinRoomMessage(String currentUid, List<Player> players){
+    public JoinRoomMessage(String currentUid, List<Player> players,boolean full){
         this.uid = currentUid;
+        this.full = full;
         setUsers(players);
     }
 
     private User[] users;
+    private boolean full;
 
     private void setUsers(List<Player> players){
         users = new User[players.size()];
@@ -30,5 +32,9 @@ public class JoinRoomMessage extends BaseMessage {
 
     public User[] getUsers() {
         return users;
+    }
+
+    public boolean isFull() {
+        return full;
     }
 }

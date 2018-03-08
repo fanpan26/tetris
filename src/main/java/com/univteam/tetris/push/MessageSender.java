@@ -56,11 +56,23 @@ public class MessageSender {
     * 发送游戏数据消息
     * */
     public static void sendGameDataMessage(String groupId, String userId, HistoryData historyData) {
+        if (historyData == null){
+            return;
+        }
         UserGameDataMessage message = new UserGameDataMessage();
         message.setUid(userId);
         message.setHis(historyData);
 
         PushData data = PushData.buildHisData(message);
+        sendMessage(groupId, data);
+    }
+
+    /**
+     * 发送下一个方块的消息
+     * */
+    public static void sendNextBlockMessage(String groupId,String userId,String points){
+        NextBlockMessage message = new NextBlockMessage(userId,points);
+        PushData data = PushData.build(message,4);
         sendMessage(groupId, data);
     }
 
