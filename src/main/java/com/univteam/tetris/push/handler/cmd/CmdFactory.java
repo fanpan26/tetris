@@ -18,6 +18,8 @@ public class CmdFactory {
         cmdHandlerMap.put("DOWN",new CmdDownHandler());
         cmdHandlerMap.put("LEFT",new CmdLeftHandler());
         cmdHandlerMap.put("RIGHT",new CmdRightHandler());
+        cmdHandlerMap.put("START",new CmdStartHandler());
+        cmdHandlerMap.put("CHAT",new CmdChatHandler());
     }
 
     public static AbstractCmdHandler getHandler(String cmd){
