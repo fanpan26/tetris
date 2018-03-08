@@ -30,6 +30,7 @@ public class GameData {
     private final GameListener gameListener = new DefaultGameListener();
     private final ConcurrentMap<String,Point> stopedPoints = new ConcurrentHashMap<>(1000);
     private final Player player;
+    private Block nextBlock;
     private int totalScore;
 
     public int getTotalScore(){
@@ -39,6 +40,7 @@ public class GameData {
     public  GameData (Player player) {
         this.player = player;
         this.status = GameStatus.WAITING;
+        nextBlock = BlockUtil.createBlock();
     }
 
     public GameStatus getStatus() {
@@ -54,7 +56,7 @@ public class GameData {
      * 游戏开始
      * */
     public void start(){
-        currentBlock = BlockUtil.createBlock();
+       createNextBlock();
         //检查当前这个方块是否在已经停止的方块上
         if (shouldStop(Direction.NONE)){
             status = GameStatus.OVER;
@@ -64,13 +66,32 @@ public class GameData {
         }
     }
 
+    /*
+    * 创建一个新的方块
+    * **/
+    private void createNextBlock(){
+        currentBlock = nextBlock;
+        nextBlock = BlockUtil.createBlock();
+
+        gameListener.createBlock(player.getRoom().getGroupId(),player.getId(),nextBlock);
+    }
+
+    /**
+     * 设置准备就绪状态
+     * */
+    public void prepare(){
+        status = GameStatus.PREPARED;
+    }
+
     /**
      * 游戏下一步
      * */
     public void refresh() {
         switch (status){
             case WAITING:
+                break;
             case STOPED:
+            case PREPARED:
                 start();
                 break;
             case STARTED:
@@ -103,7 +124,6 @@ public class GameData {
         if (gameStarted()) {
             currentBlock.rotate();
             if (!canRotate()){
-                System.out.println("不可以旋转，撤回");
                 currentBlock.prev();
             }
         }
@@ -143,7 +163,11 @@ public class GameData {
      * 获取历史数据
      * */
     public HistoryData getHistory(){
-        return currentBlock.getHistory();
+        if (currentBlock != null) {
+            return currentBlock.getHistory();
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -279,9 +303,25 @@ public class GameData {
      * 游戏状态
      * */
     private enum GameStatus{
+        /**
+         * 等待开始
+         * */
         WAITING,
+        /**
+         * 准备就绪，可以开始
+         * */
+        PREPARED,
+        /**
+         * 已经开始
+         * */
         STARTED,
+        /**
+         * 停止状态
+         * */
         STOPED,
+        /**
+         * 游戏结束
+         * */
         OVER
     }
 
