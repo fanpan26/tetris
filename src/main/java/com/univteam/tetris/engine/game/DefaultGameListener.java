@@ -1,5 +1,8 @@
 package com.univteam.tetris.engine.game;
 
+import com.univteam.tetris.engine.block.Block;
+import com.univteam.tetris.engine.data.DataUtil;
+import com.univteam.tetris.engine.data.HistoryData;
 import com.univteam.tetris.engine.player.Player;
 import com.univteam.tetris.push.MessageSender;
 
@@ -30,5 +33,17 @@ public class DefaultGameListener implements GameListener {
         int totalScore = player.getGameData().getTotalScore();
 
         MessageSender.sendUserScoreMessage(roomId,playerId,totalScore);
+    }
+
+    /**
+     * 下一个block事件
+     * */
+    @Override
+    public void createBlock(String groupId, String userId, Block nextBlock) {
+        if (nextBlock == null) {
+            return;
+        }
+        String pointString = DataUtil.transData(nextBlock.getPoints());
+        MessageSender.sendNextBlockMessage(groupId,userId,pointString);
     }
 }
