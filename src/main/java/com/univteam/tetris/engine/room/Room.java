@@ -55,7 +55,7 @@ public class Room {
     /**
      * 判断是否满员
      * */
-    private boolean isFull(){
+    public boolean isFull(){
         return players.size() >= PLAYER_COUNT;
     }
 
@@ -119,16 +119,16 @@ public class Room {
      * */
     public void refresh(){
         if (started) {
-            System.out.println("游戏进行中...");
+            //System.out.println("游戏已经开始...");
             for (Player player : players){
                 player.play();
                 HistoryData historyData = player.getGameData().getHistory();
-                if (listener != null){
+                if (listener != null && historyData != null){
                     listener.onchange(historyData,player.getId());
                 }
             }
         }else{
-            System.out.println("游戏尚未开始,正在等人...");
+            //System.out.println("游戏尚未开始,正在等人...");
         }
     }
 }
