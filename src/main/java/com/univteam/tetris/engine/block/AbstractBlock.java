@@ -100,7 +100,7 @@ public abstract class AbstractBlock implements Block {
      * */
     @Override
     public void down(){
-
+       // next();
     }
 
     /**
@@ -167,27 +167,18 @@ public abstract class AbstractBlock implements Block {
      * 每个点的状态变化
      * */
     private void changeStatusToNormal(){
-        for (Point point : points){
-            point.normal();
-        }
         historyData.setAdded(points);
     }
     /**
      * 将点清除
      * */
     private void changeStatusToClear(){
-        for (Point point : points){
-            point.clear();
-        }
         historyData.setCleared(points);
     }
     /**
      * 将点的状态替换成已经停止
      * */
     private void changeStatusToStop(){
-        for (Point point : points){
-            point.stop();
-        }
     }
 
     /**

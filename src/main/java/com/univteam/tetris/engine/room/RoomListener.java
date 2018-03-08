@@ -9,5 +9,5 @@ import com.univteam.tetris.engine.data.HistoryData;
  * @Project com.univteam.tetris
  */
 public interface RoomListener {
-    void onchange(HistoryData historyData);
+    void onchange(HistoryData historyData,String uid);
 }

@@ -5,6 +5,8 @@ import com.univteam.tetris.engine.point.Point;
 import com.univteam.tetris.engine.point.PointCache;
 import org.omg.PortableServer.POA;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,25 +63,33 @@ public class GameMap {
      * 检查是否得分
      * */
     public static int getFullCount(Map<String,Point> points) {
-        if(points == null || points.size() < MAX_RANGE_WIDTH-1){
-            return 0;
+        List<Integer> fullCountList = getFullCountY(points);
+        return fullCountList.size();
+    }
+
+    /**
+     * 获取满行的行号
+     * */
+    public static List<Integer> getFullCountY(Map<String,Point> points) {
+        List<Integer> result = new ArrayList<>();
+        if (points == null || points.size() < MAX_RANGE_WIDTH - 1) {
+            return result;
         }
-        int total = 0;
-        boolean fullCount = false;
+        boolean full;
         for (int y = MAX_RANGE_HEIGHT - 1; y >= 0; y--) {
-            fullCount = true;
+            full = true;
             for (int x = 0; x < MAX_RANGE_WIDTH; x++) {
                 //如果不存在某个点，说明不是一个满行，不能加分
-                if (!points.containsKey(PointCache.getKey(x, y))){
-                    fullCount = false;
+                if (!points.containsKey(PointCache.getKey(x, y))) {
+                    full = false;
                     break;
                 }
             }
-            if(fullCount) {
-                total += 1;
+            if (full) {
+                result.add(Integer.valueOf(y));
             }
         }
-        return total;
+        return result;
     }
 
     /**

@@ -27,7 +27,7 @@ public class HistoryData {
         return s.substring(0,s.length() - 1);
     }
 
-    public void setCleared(Point[] points){
+    public  void setCleared(Point[] points){
         this.cleared = getData(points);
     }
 
@@ -46,4 +46,10 @@ public class HistoryData {
         return cleared;
     }
     public String getStoped(){return stoped;}
+
+    public void resetData(Point[] stoped,Point[] cleared){
+        setAdded(null);
+        setCleared(cleared);
+        setStoped(stoped);
+    }
 }

@@ -6,6 +6,7 @@ import com.univteam.tetris.engine.data.PushData;
 import com.univteam.tetris.engine.player.Player;
 import com.univteam.tetris.engine.room.Room;
 import com.univteam.tetris.push.BodyWrapper;
+import org.tio.core.ChannelContext;
 
 /**
  * @Author fyp
@@ -20,7 +21,7 @@ public class CmdOperateHandler extends  AbstractCmdHandler {
     }
 
     @Override
-    public Object handle(String params){
+    public Object handle(String params, ChannelContext channelContext){
         String[] cmds = params.split(":");
         if (cmds.length == 4) {
            String roomId = cmds[2];
@@ -36,7 +37,7 @@ public class CmdOperateHandler extends  AbstractCmdHandler {
                 }else{
                     handle(player);
                     if (room.getListener() != null){
-                        room.getListener().onchange(player.getGameData().getHistory());
+                        room.getListener().onchange(player.getGameData().getHistory(),player.getId());
                     }
                 }
             }

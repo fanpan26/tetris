@@ -50,15 +50,11 @@ public class TetrisWsHandler implements IWsMsgHandler {
             if(handler == null){
                 return BodyWrapper.createBody(PushData.build("无效的命令" ,0)) ;
             }
-
-           return handler.handle(text);
+           return handler.handle(text,channelContext);
         }
 
         @Override
         public HttpResponse handshake(HttpRequest httpRequest, HttpResponse httpResponse, ChannelContext channelContext) throws Exception {
-            Aio.bindUser(channelContext,"10000");
-            //测试阶段，绑定房间号
-            Aio.bindGroup(channelContext,"1");
             return httpResponse;
         }
 

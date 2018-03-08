@@ -32,33 +32,32 @@ public class LinePointBlock extends AbstractBlock {
     public void doRotate() throws RotatedFailedException {
         switch (blockStatus){
             case UP:
+                points[1] = points[0].down();
+                points[2] = points[1].right();
+                points[3] = points[1].down();
+                blockStatus = BlockStatus.RIGHT;
+                break;
+            case LEFT:
+                points[2] = points[0].down();
+                points[1] = points[2].left();
+                points[3] = points[2].right();
+
+                blockStatus = BlockStatus.UP;
+                break;
+            case DOWN:
+                points[0] = points[1].up();
                 points[2] = points[0].down();
                 points[1] = points[2].left();
                 points[3] = points[2].down();
 
                 blockStatus = BlockStatus.LEFT;
                 break;
-            case LEFT:
-                points[0] = points[1];
-                points[1] = points[0].right();
+            case RIGHT:
+                points[0] = points[1].left();
                 points[2] = points[1].right();
                 points[3] = points[1].down();
 
                 blockStatus = BlockStatus.DOWN;
-                break;
-            case DOWN:
-                points[0] = points[1].up();
-                points[2] = points[1].right();
-                points[3] = points[1].down();
-
-                blockStatus = BlockStatus.RIGHT;
-                break;
-            case RIGHT:
-                points[2] = points[0].down();
-                points[1] = points[2].left();
-                points[3] = points[2].right();
-
-                blockStatus = BlockStatus.UP;
                 break;
         }
     }

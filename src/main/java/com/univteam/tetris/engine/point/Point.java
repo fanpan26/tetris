@@ -70,6 +70,10 @@ public class Point {
         return  PointCache.getPoint(x ,y + 1);
     }
 
+    public Point down(int n){
+        return PointCache.getPoint(x,y + n);
+    }
+
     public void stop(){
         this.status = 0;
     }

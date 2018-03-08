@@ -6,15 +6,8 @@ package com.univteam.tetris.push.message;
  * @Date Created at 2018/3/7 15:38
  * @Project com.univteam.tetris
  */
-public class GameOverMessage {
-
+public class GameOverMessage extends BaseMessage{
     public GameOverMessage(String uid){
         this.uid = uid;
-    }
-
-    private String uid;
-
-    public String getUid() {
-        return uid;
     }
 }

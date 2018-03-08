@@ -3,125 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>俄罗斯方块</title>
+    <style>
+        .canvas{
+            background: #242736;
+            margin: 2%;
+        }
+    </style>
 </head>
 <body>
-<canvas id="tetris" width="200" height="400" style="background: Black"></canvas>
+    <canvas id="tetris_u1" width="200" height="400" class="canvas"></canvas>
+    <canvas id="tetris_u2" width="200" height="400" class="canvas"></canvas>
 </body>
-<script>
-    var code = {
-        38:'UP',
-        37:'LEFT',
-        39:'RIGHT',
-        40:'DOWN'
-    }
-    document.onkeydown = function (e) {
-        var op = code[e.keyCode];
-        if (op) {
-            ws.send('CMD:' + op + ':1:10000');//CMD:OPERATE::ROOMID:USERID
-        }
-    }
-    var colorArr = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];
-    var colors = {
-        cache:[],
-        init:function () {
-            colors.cache.push(colors.create());
-            colors.cache.push(colors.create());
-            colors.cache.push(colors.create());
-            colors.cache.push(colors.create());
-        },
-        get:function () {
-           var r = Math.ceil(Math.random() * 3);
-           return this.cache[r];
-        },
-        create:function () {
-            var res = '#', r = 0;
-            for (var i = 0; i < 6; i++) {
-                r = Math.ceil(Math.random() * 15);
-                res += colorArr[r];
-            }
-            return res;
-        }
-    }
-    var size = 20;
-    var clearColor = 'black';
-    var addColor = colors.create();
-    var stopColor = colors.create();
-    var tetris = {
-        context:null,
-        getCtx:function () {
-            if(this.context ==null) {
-                var canvas = document.getElementById('tetris');
-                this.context = canvas.getContext('2d');
-            }
-            return this.context;
-        },
-        draw:function (x,y,c) {
-            var ctx = this.getCtx();
-            if(c == clearColor){
-                ctx.clearRect(x * size, y * size, size, size);
-            }else {
-                ctx.fillStyle = c || 'green';
-                ctx.strokeStyle = clearColor;
-                ctx.lineWidth = 2;
-                ctx.fillRect(x * size, y * size, size, size);
-                ctx.strokeRect(x * size, y * size, size, size);
-            }
-        },
-        handle:function (msg) {
-            var add = msg.added;
-            var clear = msg.cleared;
-            var stop = msg.stoped;
-
-            var drawDetail = function (str,color) {
-                var xy;
-                if(str) {
-                    var arr = str.split('|');
-                    for (var i = 0; i < arr.length; i++) {
-                        xy = arr[i].split(',');
-                        tetris.draw(xy[0], xy[1], color)
-                    }
-                }
-            }
-            //先clear后add
-            drawDetail(clear,clearColor);
-            drawDetail(add,addColor);
-            drawDetail(stop,stopColor);
-        }
-    };
-
-    var msgType = {
-        sys:0,
-        block:1,
-        score:2,
-        over:3
-    };
-
-    var ws = new WebSocket('ws://127.0.0.1:8886?roomId=45');
-    ws.onopen = function (event) {
-        console.log('server started');
-        ws.send('CMD:JOIN:1');
-    }
-    ws.onmessage = function (event) {
-        try {
-            var j = JSON.parse(event.data);
-            switch(j.t){
-                case msgType.sys:
-                    console.log(j);
-                    break;
-                case msgType.block:
-                    tetris.handle(j.d);
-                    break;
-                case msgType.score:
-                    console.log(j);
-                    break;
-                case msgType.over:
-                    console.log(j);
-                    break;
-            }
-        }catch(e) {
-            console.log(e.message);
-        }
-    }
-
-</script>
 </html>

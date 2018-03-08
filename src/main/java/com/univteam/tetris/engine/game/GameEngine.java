@@ -4,8 +4,10 @@ import com.univteam.tetris.GameStarter;
 import com.univteam.tetris.engine.data.PushData;
 import com.univteam.tetris.engine.room.Room;
 import com.univteam.tetris.push.BodyWrapper;
+import com.univteam.tetris.push.MessageSender;
 import org.tio.core.Aio;
 import org.tio.core.GroupContext;
+import sun.plugin2.message.Message;
 
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -29,11 +31,8 @@ public class GameEngine {
     private HashMap<String,Room> rooms = new HashMap<>(2);
     private void initRoom() {
         Room room = new Room(1);
-        room.setRoomListener(data -> {
-           GroupContext groupContext = GameStarter.getWsServerStarter().getServerGroupContext();
-           PushData pushData = PushData.buildHisData(data);
-           //发送历史数据
-           Aio.sendToGroup(groupContext,room.getGroupId(), BodyWrapper.createBody(pushData));
+        room.setRoomListener((data,uid) -> {
+            MessageSender.sendGameDataMessage(room.getGroupId(),uid,data);
         });
         rooms.put("1", room);
         //rooms.put("2",new Room(2));

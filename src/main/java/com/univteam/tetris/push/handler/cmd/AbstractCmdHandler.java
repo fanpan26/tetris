@@ -1,6 +1,7 @@
 package com.univteam.tetris.push.handler.cmd;
 
 import org.apache.commons.lang3.StringUtils;
+import org.tio.core.ChannelContext;
 
 /**
  * @Author fyp
@@ -12,5 +13,5 @@ public abstract class AbstractCmdHandler {
     /**
      * 处理消息
      * */
-    public abstract Object handle(String params);
+    public abstract Object handle(String params, ChannelContext channelContext);
 }

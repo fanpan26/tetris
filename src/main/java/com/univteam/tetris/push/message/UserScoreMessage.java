@@ -6,14 +6,13 @@ package com.univteam.tetris.push.message;
  * @Date Created at 2018/3/7 15:31
  * @Project com.univteam.tetris
  */
-public class UserScoreMessage {
+public class UserScoreMessage extends BaseMessage {
 
     public UserScoreMessage(String uid,int score){
         this.uid = uid;
         this.score = score;
     }
 
-    private String uid;
     private int score;
 
     public String getUid() {

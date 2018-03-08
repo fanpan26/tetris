@@ -3,8 +3,13 @@ package com.univteam.tetris.push.handler.cmd;
 import com.univteam.tetris.GameStarter;
 import com.univteam.tetris.engine.data.PushData;
 import com.univteam.tetris.engine.player.Player;
+import com.univteam.tetris.engine.player.PlayerCreator;
 import com.univteam.tetris.engine.room.Room;
 import com.univteam.tetris.push.BodyWrapper;
+import com.univteam.tetris.push.MessageSender;
+import com.univteam.tetris.push.message.JoinRoomMessage;
+import org.tio.core.Aio;
+import org.tio.core.ChannelContext;
 
 /**
  * @Author fyp
@@ -18,26 +23,38 @@ public class CmdJoinRoomHandler extends AbstractCmdHandler {
      * CMD:JOIN:ROOMID
      * */
     @Override
-    public Object handle(String cmd) {
+    public Object handle(String cmd, ChannelContext channelContext) {
         String[] cmds = cmd.split(":");
         String roomId;
-        if (cmds.length == 3) {
+        String userId;
+        if (cmds.length == 4) {
              roomId = cmds[2];
+             userId = cmds[3];
         }else{
             roomId = null;
+            userId = null;
         }
         Room room = GameStarter.getEngine().getRooms().get(roomId);
         if (room == null) {
             return BodyWrapper.createBody(PushData.build("无效的房间号", 0));
         } else {
-            Player player = new Player();
-            player.setId("10000");
-            player.setName("test");
-            player.setPhoto("");
+            Player player = PlayerCreator.create(userId);
             player.setRoom(room);
 
             boolean res = room.addPlayer(player);
-            return BodyWrapper.createBody(PushData.build(res ? "加入房间成功" : "游戏已经开始，观战中...", 0));
+
+            if (res){
+                Aio.bindGroup(channelContext,roomId);
+                Aio.bindUser(channelContext,player.getId());
+
+                MessageSender.sendJoinRoomMessage(roomId,player.getId(),new JoinRoomMessage(player.getId(),room.getPlayers()));
+                //要发送一条系统消息
+                MessageSender.sendSysMessage(roomId,String.format("系统：用户【%s】加入游戏",player.getName()));
+                return null;
+            }else{
+                MessageSender.sendSysMessage(roomId,String.format("系统：用户【%s】加入游戏，观战中...",player.getName()));
+                return null;
+            }
         }
     }
 }

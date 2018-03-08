@@ -7,9 +7,12 @@ import com.univteam.tetris.engine.block.blocks.LetterLLeftBlock;
 import com.univteam.tetris.engine.player.Player;
 import com.univteam.tetris.engine.point.Point;
 import com.univteam.tetris.engine.point.PointCache;
+import com.univteam.tetris.engine.room.RoomListener;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -202,13 +205,69 @@ public class GameData {
     /**
      * 计算分数
      * */
-    private void calculate(){
-        int total = GameMap.getFullCount(stopedPoints);
-        if(total > 0) {
-            int totalScore = ScoreIndicator.getScore(total);
+    private void calculate() {
+        List<Integer> list = GameMap.getFullCountY(stopedPoints);
+        if (list.size() > 0) {
+            int totalScore = ScoreIndicator.getScore(list.size());
             this.totalScore += totalScore;
             gameListener.scoreChange(player);
+            //消除整行
+            doAfterCalculate(list);
         }
+    }
+
+    /**
+     * 获取分数之后，要计算新的位置
+     * */
+
+    private void doAfterCalculate(List<Integer> list) {
+        //遍历point
+        List<Point> shouldClearPoints = new ArrayList<>();
+        List<Point> shouldStopedPoints = new ArrayList<>();
+
+        System.out.println("移除之前条数为：" + stopedPoints.size());
+        //第一遍循环，移除满行的点
+        int y;
+        for (Integer l : list) {
+            y = l.intValue();
+            String key;
+            //遍历需要移除的点，都移除掉
+            for (int x = 0; x < GameMap.MAX_RANGE_WIDTH; x++) {
+                key = PointCache.getKey(x, y);
+                if (stopedPoints.containsKey(key)) {
+                    stopedPoints.remove(key);
+                    shouldClearPoints.add(PointCache.getPoint(x, y));
+                }
+            }
+        }
+        //第二遍循环，重置每个点的位置
+        //遍历剩余的点
+        int downCount;
+        for (Map.Entry<String, Point> entry : stopedPoints.entrySet()) {
+            downCount = 0;
+            Point point = entry.getValue();
+            for (Integer l : list) {
+                y = l.intValue();
+                if (point.getY() < y) {
+                    downCount++;
+                }
+            }
+            //根据downCount向下移动
+            if (downCount > 0){
+                shouldClearPoints.add(point);
+                shouldStopedPoints.add(point.down(downCount));
+            }
+        }
+        System.out.println("移除之后条数为：" + stopedPoints.size());
+        //最后消除不需要的行数
+        for (Point point : shouldClearPoints){
+            stopedPoints.remove(PointCache.getKey(point.getX(),point.getY()));
+        }
+        for (Point point : shouldStopedPoints){
+            stopedPoints.put(PointCache.getKey(point.getX(),point.getY()),point);
+        }
+        //消除整行之后，重新画图
+        currentBlock.getHistory().resetData(shouldStopedPoints.toArray(new Point[shouldStopedPoints.size()]), shouldClearPoints.toArray(new Point[shouldClearPoints.size()]));
     }
 
     /**

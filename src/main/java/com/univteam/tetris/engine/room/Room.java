@@ -36,7 +36,7 @@ public class Room {
     /**
      * 每个房间的最大游戏人数
      * */
-    private final int PLAYER_COUNT = 1;
+    private final int PLAYER_COUNT = 2;
     /**
      * 游戏是否开始
      * */
@@ -72,11 +72,30 @@ public class Room {
         if(isFull()) {
             return false;
         }
+        if (joined(player)){
+            return true;
+        }
         players.add(player);
         if(isFull()){
            gameStart();
         }
         return true;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * 玩家是否已经加入
+     * */
+    private boolean joined(Player player){
+        for (Player p : players){
+            if (p.getId().equals(player.getId())){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -105,7 +124,7 @@ public class Room {
                 player.play();
                 HistoryData historyData = player.getGameData().getHistory();
                 if (listener != null){
-                    listener.onchange(historyData);
+                    listener.onchange(historyData,player.getId());
                 }
             }
         }else{

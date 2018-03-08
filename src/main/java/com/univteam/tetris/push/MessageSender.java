@@ -1,9 +1,9 @@
 package com.univteam.tetris.push;
 
 import com.univteam.tetris.GameStarter;
+import com.univteam.tetris.engine.data.HistoryData;
 import com.univteam.tetris.engine.data.PushData;
-import com.univteam.tetris.push.message.GameOverMessage;
-import com.univteam.tetris.push.message.UserScoreMessage;
+import com.univteam.tetris.push.message.*;
 import org.tio.core.Aio;
 import org.tio.core.GroupContext;
 import org.tio.websocket.common.WsResponse;
@@ -30,6 +30,37 @@ public class MessageSender {
      * */
     public static void sendGameOverMessage(String groupId,String userId) {
         PushData data = PushData.build(new GameOverMessage(userId), 3);
+        sendMessage(groupId, data);
+    }
+
+
+    /**
+     * 发送系统消息
+     * */
+    public static void sendSysMessage(String groupId,String message){
+        SysMessage sysMessage = new SysMessage(message);
+
+        PushData data = PushData.build(sysMessage,100);
+        sendMessage(groupId, data);
+    }
+
+    /**
+     * 发送加入聊天室消息
+     * */
+    public static void sendJoinRoomMessage(String groupId, String userId, JoinRoomMessage message){
+        PushData data = PushData.build(message,0);
+        sendMessage(groupId, data);
+    }
+
+   /**
+    * 发送游戏数据消息
+    * */
+    public static void sendGameDataMessage(String groupId, String userId, HistoryData historyData) {
+        UserGameDataMessage message = new UserGameDataMessage();
+        message.setUid(userId);
+        message.setHis(historyData);
+
+        PushData data = PushData.buildHisData(message);
         sendMessage(groupId, data);
     }
 
