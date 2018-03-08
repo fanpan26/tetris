@@ -29,11 +29,11 @@ public class CmdOperateHandler extends  AbstractCmdHandler {
 
             Room room = GameStarter.getEngine().getRooms().get(roomId);
             if (room == null) {
-                return BodyWrapper.createBody(PushData.build("房间不存在", 0));
+                return BodyWrapper.createBody(PushData.build("房间不存在", 100));
             }else{
                 Player player = room.getPlayer(userId);
                 if(player == null){
-                    return BodyWrapper.createBody(PushData.build("玩家不存在", 0));
+                    return BodyWrapper.createBody(PushData.build("玩家不存在", 100));
                 }else{
                     handle(player);
                     if (room.getListener() != null){
@@ -43,7 +43,7 @@ public class CmdOperateHandler extends  AbstractCmdHandler {
             }
             return null;
         } else {
-            return BodyWrapper.createBody(PushData.build("指令无效", 0));
+            return BodyWrapper.createBody(PushData.build("指令无效", 100));
         }
     }
 }
