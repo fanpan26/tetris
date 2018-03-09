@@ -23,8 +23,8 @@ public class TetrisHttpServerStarter {
      * */
     public void start() throws IOException{
         HttpConfig httpConfig = new HttpConfig(port,null,null,null);
-       // httpConfig.setPageRoot("classes/page");
-         httpConfig.setPageRoot("classpath:page");
+        httpConfig.setPageRoot("classes/page");
+        //httpConfig.setPageRoot("classpath:page");
         HttpServerStarter starter = new HttpServerStarter(httpConfig,new DefaultHttpRequestHandler(httpConfig,null));
         starter.start();
     }
