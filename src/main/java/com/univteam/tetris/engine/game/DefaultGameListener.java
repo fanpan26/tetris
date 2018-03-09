@@ -20,7 +20,9 @@ public class DefaultGameListener implements GameListener {
     @Override
     public void gameOver(Player player) {
         String roomId = player.getRoom().getGroupId();
-        MessageSender.sendSysMessage(roomId,String.format("系统：用户【%s】游戏结束。总得分：%d",player.getName(),player.getGameData().getTotalScore()));
+        MessageSender.sendSysMessage(roomId, String.format("系统：用户【%s】游戏结束。总得分：%d", player.getName(), player.getGameData().getTotalScore()));
+        boolean isAllOver = player.getRoom().allOver();
+        MessageSender.sendGameOverMessage(roomId, player.getId(), isAllOver);
     }
 
     /**

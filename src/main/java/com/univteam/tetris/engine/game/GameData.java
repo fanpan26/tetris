@@ -1,5 +1,6 @@
 package com.univteam.tetris.engine.game;
 
+import com.univteam.tetris.GameStarter;
 import com.univteam.tetris.engine.block.Block;
 import com.univteam.tetris.engine.block.BlockUtil;
 import com.univteam.tetris.engine.data.HistoryData;
@@ -47,6 +48,10 @@ public class GameData {
         return status;
     }
 
+    public boolean isOver(){
+        return status == GameStatus.OVER;
+    }
+
 
     public Player getPlayer() {
         return player;
@@ -57,13 +62,6 @@ public class GameData {
      * */
     public void start(){
        createNextBlock();
-        //检查当前这个方块是否在已经停止的方块上
-        if (shouldStop(Direction.NONE)){
-            status = GameStatus.OVER;
-            gameListener.gameOver(player);
-        }else {
-            status = GameStatus.STARTED;
-        }
     }
 
     /*
@@ -72,8 +70,13 @@ public class GameData {
     private void createNextBlock(){
         currentBlock = nextBlock;
         nextBlock = BlockUtil.createBlock();
-
-        gameListener.createBlock(player.getRoom().getGroupId(),player.getId(),nextBlock);
+        if (shouldStop(Direction.NONE)){
+            status = GameStatus.OVER;
+            gameListener.gameOver(player);
+        }else {
+            status = GameStatus.STARTED;
+            gameListener.createBlock(player.getRoom().getGroupId(), player.getId(), nextBlock);
+        }
     }
 
     /**
@@ -81,6 +84,8 @@ public class GameData {
      * */
     public void prepare(){
         status = GameStatus.PREPARED;
+        totalScore = 0;
+        stopedPoints.clear();
     }
 
     /**
@@ -112,7 +117,7 @@ public class GameData {
                 }
                 break;
             case OVER:
-                System.out.println("游戏已经结束");
+                //gameListener.gameOver(player);
                 break;
         }
     }

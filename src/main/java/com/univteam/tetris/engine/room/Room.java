@@ -73,11 +73,11 @@ public class Room {
      * 添加一名玩家
      * */
     public boolean addPlayer(Player player){
-        if(isFull()) {
-            return false;
-        }
         if (joined(player)){
             return true;
+        }
+        if(isFull()) {
+            return false;
         }
         Lock lock = playerSetWithLock.getLock().writeLock();
         try {
@@ -99,6 +99,22 @@ public class Room {
 
     public Set<Player> getPlayers() {
         return playerSetWithLock.getObj();
+    }
+
+    /**
+     * 当前两个人是否已经都结束游戏
+     * */
+    public boolean allOver() {
+        Set<Player> players = getPlayers();
+        if (isFull()){
+            for (Player player : players){
+                if (!player.getGameData().isOver()){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -149,15 +165,17 @@ public class Room {
      * */
     public void refresh(){
         if (started) {
+            if (allOver()) {
+                return;
+            }
             Lock lock = playerSetWithLock.getLock().readLock();
-
             try {
                 lock.lock();
                 Set<Player> players = getPlayers();
                 for (Player player : players) {
                     player.play();
                     HistoryData historyData = player.getGameData().getHistory();
-                    if (listener != null && historyData != null) {
+                    if (listener != null) {
                         listener.onchange(historyData, player.getId());
                     }
                 }

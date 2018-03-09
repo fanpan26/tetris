@@ -28,8 +28,8 @@ public class MessageSender {
     /**
      * 发送游戏结束信息
      * */
-    public static void sendGameOverMessage(String groupId,String userId) {
-        PushData data = PushData.build(new GameOverMessage(userId), 3);
+    public static void sendGameOverMessage(String groupId,String userId,boolean isOver) {
+        PushData data = PushData.build(new GameOverMessage(userId,isOver), 3);
         sendMessage(groupId, data);
     }
 

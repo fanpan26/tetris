@@ -52,7 +52,17 @@ $(function () {
             ctx.clearRect(0,0,200,400);
             tetris.drawDetail(points.join('|'),'green',user.uid);
         },
-        count:function () {
+        count:function (clear) {
+            if(clear){
+                var ctx = tetris.getCtx(user.uid);
+                var ctx1= tetris.getCtxSmall(user.uid);
+                var ctx2 =tetris.getCtx('0');
+                var ctx3 = tetris.getCtxSmall('0');
+                ctx.clearRect(0,0,200,400);
+                ctx1.clearRect(0,0,90,90);
+                ctx2.clearRect(0,0,200,400);
+                ctx3.clearRect(0,0,90,90);
+            }
             var i = 3;
             this.interval = setInterval(function () {
                 if(i == 0) {
@@ -63,6 +73,7 @@ $(function () {
                     }
                 }else{
                     chat.append('玩家已经就绪,准备开始.'+i+'...');
+                    tetris.isOver = false;
                 }
                 i--;
             }, 1000);
@@ -74,6 +85,7 @@ $(function () {
     var addColor = '#01C7D8';
     var stopColor = '#84D477';
     var tetris = {
+        isOver:false,
         context1: null,
         context2: null,
         context3:null,
@@ -134,7 +146,10 @@ $(function () {
             }
         },
         drawDetail:function (str,color,uid,small) {
-            console.log("准备开始画")
+            if (this.isOver){
+                //已经结束，不在画图
+                return;
+            }
             var xy;
             if (str) {
                 if(small){
@@ -189,6 +204,13 @@ $(function () {
                 $('#user_score_u2').html(d.score);
             }
         },
+        over:function (d) {
+          if(d.over) {
+              //重新开始
+              tetris.isOver = true;
+              countDown.count(true);
+          }
+        },
         next:function (d) {
             var uid = d.uid;
             var points = d.points;
@@ -206,6 +228,9 @@ $(function () {
                 (t? '<span>' + chat.getTime() + '</span>\n':'') +
                 '<p> ' + getMsg(d.msg || d) + '</p>\n' +
                 '</li>');
+
+            var scrollHeight = $('.chat').prop("scrollHeight");
+            $('.chat').scrollTop(scrollHeight,200);
         },
         send:function () {
             var txt = $('#text_chat').val();
@@ -264,7 +289,7 @@ $(function () {
                   tetris.score(j.d);
                     break;
                 case msgType.over:
-                    console.log(j);
+                    tetris.over(j.d);
                     break;
                 case msgType.next:
                     tetris.next(j.d);

@@ -7,7 +7,13 @@ package com.univteam.tetris.push.message;
  * @Project com.univteam.tetris
  */
 public class GameOverMessage extends BaseMessage{
-    public GameOverMessage(String uid){
+    public GameOverMessage(String uid,boolean allOver){
         this.uid = uid;
+        this.over = allOver;
+    }
+    private boolean over;
+
+    public boolean isOver() {
+        return over;
     }
 }
