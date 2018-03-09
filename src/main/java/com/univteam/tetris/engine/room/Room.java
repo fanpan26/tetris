@@ -2,9 +2,13 @@ package com.univteam.tetris.engine.room;
 
 import com.univteam.tetris.engine.data.HistoryData;
 import com.univteam.tetris.engine.player.Player;
+import org.tio.utils.lock.SetWithLock;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.locks.Lock;
 
 /**
  * @Author fyp
@@ -45,7 +49,7 @@ public class Room {
     /**
      * 当前房间玩家列表
      * */
-    private final List<Player> players = new ArrayList<>(2);
+    private final SetWithLock<Player> playerSetWithLock = new SetWithLock<>(new HashSet<>());
 
     /**
      * 当前房间监听器
@@ -56,7 +60,7 @@ public class Room {
      * 判断是否满员
      * */
     public boolean isFull(){
-        return players.size() >= PLAYER_COUNT;
+        return playerSetWithLock.getObj().size() >= PLAYER_COUNT;
     }
 
     /**
@@ -68,46 +72,72 @@ public class Room {
     /**
      * 添加一名玩家
      * */
-    public synchronized boolean addPlayer(Player player){
+    public boolean addPlayer(Player player){
         if(isFull()) {
             return false;
         }
         if (joined(player)){
             return true;
         }
-        players.add(player);
+        Lock lock = playerSetWithLock.getLock().writeLock();
+        try {
+            lock.lock();
+            Set<Player> players = playerSetWithLock.getObj();
+            players.add(player);
+        }
+        catch (Throwable e){
+
+        }
+        finally {
+            lock.unlock();
+        }
         if(isFull()){
            gameStart();
         }
         return true;
     }
 
-    public List<Player> getPlayers() {
-        return players;
+    public Set<Player> getPlayers() {
+        return playerSetWithLock.getObj();
     }
 
     /**
      * 玩家是否已经加入
      * */
-    private boolean joined(Player player){
-        for (Player p : players){
-            if (p.getId().equals(player.getId())){
-                return true;
+    private boolean joined(Player player) {
+        Lock lock = playerSetWithLock.getLock().readLock();
+        try {
+            lock.lock();
+            Set<Player> players = getPlayers();
+            for (Player p : players) {
+                if (p.getId().equals(player.getId())) {
+                    return true;
+                }
             }
+            return false;
+        } finally {
+            lock.unlock();
         }
-        return false;
     }
 
     /**
      * 获取当前的player
      * */
     public Player getPlayer(String playerId){
-        for (Player player : players){
-            if (player.getId().equals(playerId)){
-                return player;
+        Lock lock = playerSetWithLock.getLock().readLock();
+
+        try {
+            lock.lock();
+            Set<Player> players = getPlayers();
+            for (Player player : players) {
+                if (player.getId().equals(playerId)) {
+                    return player;
+                }
             }
+            return null;
+        }finally {
+            lock.unlock();
         }
-        return null;
     }
 
     public RoomListener getListener() {
@@ -119,13 +149,23 @@ public class Room {
      * */
     public void refresh(){
         if (started) {
-            //System.out.println("游戏已经开始...");
-            for (Player player : players){
-                player.play();
-                HistoryData historyData = player.getGameData().getHistory();
-                if (listener != null && historyData != null){
-                    listener.onchange(historyData,player.getId());
+            Lock lock = playerSetWithLock.getLock().readLock();
+
+            try {
+                lock.lock();
+                Set<Player> players = getPlayers();
+                for (Player player : players) {
+                    player.play();
+                    HistoryData historyData = player.getGameData().getHistory();
+                    if (listener != null && historyData != null) {
+                        listener.onchange(historyData, player.getId());
+                    }
                 }
+            }catch (Throwable e){
+
+            }
+            finally {
+                lock.unlock();
             }
         }else{
             //System.out.println("游戏尚未开始,正在等人...");

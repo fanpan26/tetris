@@ -3,6 +3,7 @@ package com.univteam.tetris.push.message;
 import com.univteam.tetris.engine.player.Player;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author fyp
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class JoinRoomMessage extends BaseMessage {
 
-    public JoinRoomMessage(String currentUid, List<Player> players,boolean full){
+    public JoinRoomMessage(String currentUid, Set<Player> players, boolean full){
         this.uid = currentUid;
         this.full = full;
         setUsers(players);
@@ -21,7 +22,7 @@ public class JoinRoomMessage extends BaseMessage {
     private User[] users;
     private boolean full;
 
-    private void setUsers(List<Player> players){
+    private void setUsers(Set<Player> players){
         users = new User[players.size()];
         int i = 0;
         for (Player player : players){
