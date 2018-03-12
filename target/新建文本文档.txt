@@ -1,2 +1,0 @@
-cd /java/tetris
-java -jar tetris-1.0-SNAPSHOT.jar
