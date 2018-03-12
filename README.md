@@ -15,5 +15,5 @@
 以下为测试截图：
 
 ![](http://img1.gurucv.com/image/2018/3/12/6c493b85fabf4113a2ebd9e4aa1d9c4d.png)
-![](http://img1.gurucv.com/image/2018/3/12/d8337e47542a4cd3acd574ab4bc9d8de.png)
+![](http://img1.gurucv.com/image/2018/3/12/d8337e47542a4cd3acd574ab4bc9d8de.png?t=1)
 
