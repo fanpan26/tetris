@@ -12,7 +12,6 @@ import com.univteam.tetris.engine.block.blocks.*;
 public class BlockUtil {
     public static Block createBlock(){
         int random = RandomUtil.randomInt(1,7);
-        int rotateTime = RandomUtil.randomInt(1,2);
         Block block;
         switch (random) {
             case 1:
@@ -40,9 +39,6 @@ public class BlockUtil {
                 block = new LineBlock();
                 break;
         }
-       // for (int i=0;i<rotateTime;i++) {
-        //    block.rotate();
-        //}
         return block;
     }
 }

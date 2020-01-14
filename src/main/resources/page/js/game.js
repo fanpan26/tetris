@@ -2,12 +2,13 @@ $(function () {
     var currentRoomId =1;
     var user = {
         uid: (function () {
-            var u = localStorage.getItem('tetris_uid');
-            if(!u){
-                u = new Date().getTime() +'';
-                localStorage.setItem('tetris_uid',u);
-            }
-            return u;
+            // var u = localStorage.getItem('tetris_uid');
+            // if(!u){
+            //     u = new Date().getTime() +'';
+            //     localStorage.setItem('tetris_uid',u);
+            // }
+            // return u;
+            return new Date().getTime() +'';
         })(),
         photo: ''
     };
@@ -29,7 +30,7 @@ $(function () {
             }
         }
     }
-    $(document).on('click','#btn_send',function () {
+    $(document).on('click','#btnSend',function () {
        chat.send();
     });
 

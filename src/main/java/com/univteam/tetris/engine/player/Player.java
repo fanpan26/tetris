@@ -1,6 +1,5 @@
 package com.univteam.tetris.engine.player;
 
-import com.univteam.tetris.engine.data.HistoryData;
 import com.univteam.tetris.engine.game.GameData;
 import com.univteam.tetris.engine.room.Room;
 
@@ -11,10 +10,28 @@ import com.univteam.tetris.engine.room.Room;
  * @Project com.univteam.tetris
  */
 public class Player {
+
+    private static final int ROLE_PLAYER = 1;
+    private static final int ROLE_AUDIENCE = 2;
+
+
     private String id;
     private String name;
     private String photo;
     private Room room;
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        if (role != ROLE_PLAYER && role != ROLE_AUDIENCE) {
+            throw new IllegalArgumentException("invalid role value :" + role);
+        }
+        this.role = role;
+    }
+
+    private int role = ROLE_PLAYER;
 
     public void setRoom(Room room){
         this.room = room;

@@ -6,7 +6,6 @@ import com.univteam.tetris.engine.data.PushData;
 import com.univteam.tetris.push.message.*;
 import org.tio.core.Aio;
 import org.tio.core.GroupContext;
-import org.tio.websocket.common.WsResponse;
 
 /**
  * @Author fyp

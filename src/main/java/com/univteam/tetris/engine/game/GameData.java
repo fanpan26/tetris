@@ -1,18 +1,13 @@
 package com.univteam.tetris.engine.game;
 
-import com.univteam.tetris.GameStarter;
-import com.univteam.tetris.engine.block.Block;
 import com.univteam.tetris.engine.block.BlockUtil;
-import com.univteam.tetris.engine.data.HistoryData;
-import com.univteam.tetris.engine.block.blocks.LetterLLeftBlock;
 import com.univteam.tetris.engine.player.Player;
 import com.univteam.tetris.engine.point.Point;
 import com.univteam.tetris.engine.point.PointCache;
-import com.univteam.tetris.engine.room.RoomListener;
+import com.univteam.tetris.engine.block.Block;
+import com.univteam.tetris.engine.data.HistoryData;
 
-import javax.swing.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

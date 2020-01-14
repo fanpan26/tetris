@@ -4,9 +4,7 @@ import com.univteam.tetris.engine.data.HistoryData;
 import com.univteam.tetris.engine.player.Player;
 import org.tio.utils.lock.SetWithLock;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 
@@ -84,9 +82,6 @@ public class Room {
             lock.lock();
             Set<Player> players = playerSetWithLock.getObj();
             players.add(player);
-        }
-        catch (Throwable e){
-
         }
         finally {
             lock.unlock();

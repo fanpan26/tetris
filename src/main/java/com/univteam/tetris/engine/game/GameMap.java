@@ -3,7 +3,6 @@ package com.univteam.tetris.engine.game;
 import com.univteam.tetris.engine.block.Block;
 import com.univteam.tetris.engine.point.Point;
 import com.univteam.tetris.engine.point.PointCache;
-import org.omg.PortableServer.POA;
 
 import java.util.ArrayList;
 import java.util.List;

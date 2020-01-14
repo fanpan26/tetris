@@ -1,9 +1,6 @@
 package com.univteam.tetris.push.handler;
 
-import com.univteam.tetris.GameStarter;
 import com.univteam.tetris.engine.data.PushData;
-import com.univteam.tetris.engine.player.Player;
-import com.univteam.tetris.engine.room.Room;
 import com.univteam.tetris.push.BodyWrapper;
 import com.univteam.tetris.push.handler.cmd.AbstractCmdHandler;
 import com.univteam.tetris.push.handler.cmd.CmdFactory;
@@ -15,7 +12,6 @@ import org.tio.http.common.HttpResponse;
 import org.tio.websocket.common.WsRequest;
 import org.tio.websocket.server.handler.IWsMsgHandler;
 
-import java.net.URLDecoder;
 
 /**
  * @Author fyp

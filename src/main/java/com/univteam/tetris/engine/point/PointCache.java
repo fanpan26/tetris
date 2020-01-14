@@ -2,7 +2,6 @@ package com.univteam.tetris.engine.point;
 
 import com.univteam.tetris.engine.block.RotatedFailedException;
 import com.univteam.tetris.engine.game.GameMap;
-import javafx.scene.transform.Rotate;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

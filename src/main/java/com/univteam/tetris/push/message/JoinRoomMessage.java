@@ -2,7 +2,6 @@ package com.univteam.tetris.push.message;
 
 import com.univteam.tetris.engine.player.Player;
 
-import java.util.List;
 import java.util.Set;
 
 /**

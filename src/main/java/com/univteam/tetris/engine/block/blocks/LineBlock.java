@@ -7,7 +7,7 @@ import com.univteam.tetris.engine.block.AbstractBlock;
 
 /**
  *                                   口
- *                  口 口 口 口      口
+ *                  口 口 口 口       口
  *                                   口
  *                                   口
  * @Author fyp
